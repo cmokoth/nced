@@ -1,0 +1,33 @@
+---
+title: "NCED: Part 1"
+author: "Christian Okoth"
+date: "November 22, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##Project Assignment #1					Due: Tuesday, October 8 by 3:00PM
+Value: 20% of your project grade (4% of your final grade)
+1. Describe your topic. What relationship/phenomenon do you want to study? This should be a research question that has been reﬁned and polished since your initial discussions with me on your topic.
+I want to study regional economic development in North Carolina. 
+
+2. Why is this topic interesting and important? What policy makers or ﬁrms would be interested in the topic?
+
+3. What is the population you are studying? What sample are you using? How representative is your sample of the population? What problems might there be with your sample?
+
+4. What is the source of your data? Did you have transform the data to get them into their present form? If so, what did you do?
+
+5. Describe the characteristics of each variable: units of measurement, whether it is categorical or quantitative, discrete or continuous. If a variable is categorical, provide the coding scheme used to convert it to a dummy variable.
+
+6. What is your dependent variable? Which of your independent variables is the primary focus of the project? (If you do not have a primary independent variable, which independent variable do you suspect will play the largest role in explaining your dependent variable?) Why did you include the other independent variables (these ones that are not the primary focus)? What factors are these variables controlling for?
+
+7. Are there variables that you would like to include but do not have data for? How might those omissions aﬀect your results?
+
+8. Print the ﬁrst page of your data in the Excel spreadsheet or gretl table. Do not print or submit more than one page because doing so is wasteful. This requirement assures me that you have already collected the data.
+```{r echo=FALSE, results='asis'}
+library(knitr)
+kable(fullset[1:20,], caption="First 20 Observations.")
+```
