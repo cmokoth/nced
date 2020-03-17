@@ -1,25 +1,30 @@
-#cleaning the data
+## Data Cleaning ##
 
-install.packages("Rgretl")
+## Package Loading
+# install.packages("Rgretl")
 library(knitr)
 library(formattable)
 library(tidyverse)
 library(xlsx)
 
-write_csv(fullc,"C:\\Users\\Christian Okoth\\Documents\\gretl\\fullc.csv", 
-     #     delim=",", 
-          append=FALSE, 
-          col_names=TRUE, 
-          quote_escape="none")
+## Data Load ##
+census = write.table()
 
-write_csv(fullset,"C:\\Users\\Christian Okoth\\Documents\\gretl\\fullset.csv", 
-          #     delim=",", 
-          append=FALSE, 
-          col_names=TRUE, 
-          quote_escape="none")
+# write_csv(fullc,"C:\\Users\\Christian Okoth\\Documents\\gretl\\fullc.csv", 
+#      #     delim=",", 
+#           append=FALSE, 
+#           col_names=TRUE, 
+#           quote_escape="none")
+# 
+# write_csv(fullset,"C:\\Users\\Christian Okoth\\Documents\\gretl\\fullset.csv", 
+#           #     delim=",", 
+#           append=FALSE, 
+#           col_names=TRUE, 
+#           quote_escape="none")
 
 #reorganizing the data
 census = census_population_and_housing_linc #shorten the name
+
 
 #format raw col as rows
 census1 = tidyr::spread(census,3,4) #redo spread correctly, null values in pop est.
@@ -36,7 +41,7 @@ employment1 = tidyr::spread(education,3,4)
 employment1 = employment1[-2]
 
 #join datasets together
-cc_table = inner_join(census1,count1,by='Area Name')
+cc_table = inner_join(census1,count1,by='Area Name') # join edu and count
 ee_table = inner_join(education1,employment1,by='Area Name')
 full = inner_join(cc_table,ee_table,by='Area Name')
 
@@ -60,6 +65,27 @@ class(fullm)
 
 #print
 head(full,20)
+
+# rename variables
+fullset = fullset %>% 
+  rename(
+    area = 1,
+    medi_owner = 2,
+    outsiders = 3,
+    pop = 4,
+    avg_employ = 5,
+    avg_wage = 6,
+    employ_resid = 7,
+    fam_income = 8,
+    college = 9,
+    high_sch = 10,
+    sat = 11,
+    white_maj = 12,
+    part = 13
+  )
+
+fullset = fullset %>% 
+  select(name, everything())
 
 #export to .xlsx
 #xlsx::
@@ -89,28 +115,8 @@ fullset = full
 colnames(fullset)
 fullset1 = fullset
 
-fullset = fullset %>% 
-  rename(
-    area = 1,
-    medi_owner = 2,
-    outsiders = 3,
-    pop = 4,
-    avg_employ = 5,
-    avg_wage = 6,
-    employ_resid = 7,
-    fam_income = 8,
-    college = 9,
-    high_sch = 10,
-    sat = 11,
-    white_maj = 12,
-    part = 13
-  )
-
-fullset = fullset %>% 
-  select(name, everything())
-
-#getting rid of the word "County"
-fullc2 = separate(fullc, fullc$`Area Name`, sep = " ", into = c("name","county"))
+# getting rid of the word "County"
+# fullc2 = separate(fullc, fullc$`Area Name`, sep = " ", into = c("name","county"))
 fullc = separate(full1, geo_point_2d, sep=",", into = c("lat","long"))
 
 fullset$county = full$`Area Name`

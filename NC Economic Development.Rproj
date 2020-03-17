@@ -1,6 +1,6 @@
 Version: 1.0
 
-RestoreWorkspace: Default
+RestoreWorkspace: Yes
 SaveWorkspace: Yes
 AlwaysSaveHistory: Yes
 
@@ -11,3 +11,5 @@ Encoding: UTF-8
 
 RnwWeave: Sweave
 LaTeX: pdfLaTeX
+
+QuitChildProcessesOnExit: Yes
