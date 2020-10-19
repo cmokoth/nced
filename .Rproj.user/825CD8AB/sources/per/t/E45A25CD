@@ -1,0 +1,29 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1575515478929.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "E45A25CD",
+    "lastKnownWriteTime" : 29273895801389163,
+    "last_content_update" : 1575515478929,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "C8A132FC",
+        "caption" : "fullc",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=fullc&cache_key=C8A132FC",
+        "displayedObservations" : 100,
+        "environment" : "",
+        "object" : "fullc",
+        "preview" : 0,
+        "totalObservations" : 100,
+        "variables" : 25
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

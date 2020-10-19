@@ -1,0 +1,29 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1575514193194.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "FE24D333",
+    "lastKnownWriteTime" : 3419473789575321445,
+    "last_content_update" : 1575514193194,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "4479D410",
+        "caption" : "fullm.p",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=fullm.p&cache_key=4479D410",
+        "displayedObservations" : 10,
+        "environment" : "",
+        "object" : "fullm.p",
+        "preview" : 0,
+        "totalObservations" : 10,
+        "variables" : 10
+    },
+    "relative_order" : 11,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}
