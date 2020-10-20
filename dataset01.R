@@ -2,119 +2,103 @@
 
 ## Package Loading
 library(knitr)
+library(tidyverse)
 library(formattable)
 library(tidyverse)
+library(skimr)
 
 ## Data Load ##
-census = read.table(
-    "census-population-and-housing-linc.csv",
-    header = T,
-    sep = ";",
-    dec = "."
+census = read_delim(
+  "LINC/census-population-and-housing-linc.csv",
+  delim = ";"
 )
-count = read.table(
-  "",
-  header = T,
-  sep = ";",
-  dec = ".",
-  quote = "\"'"
+count = read_csv(
+  "LINC/ncccc-nc-complete-count-committee.csv"
 )
-education = read.table(
-  "education.csv",
-  header = T,
-  sep = ";",
-  dec = ".",
-  quote = "\"'"
+education = read_delim(
+  "LINC/education.csv",
+  delim = ";"
 )
-employment = read.table(
-  "employment-and-income-linc.csv",
-  header = T,
-  sep = ";",
-  dec = ".",
-  quote = "\"'"
+employment = read_delim(
+  "LINC/employment-and-income-linc.csv",
+  delim = ";"
 )
 
 ## FORMAT raw col as rows ##
-census1 = tidyr::spread(census,3,4) #redo spread correctly, null values in pop est.
-census1 = census1[-2]
-census1 = na.omit(census1) #removes entries with null values
+census1 = census %>% 
+  pivot_wider(names_from = Variable,values_from = Value) %>% 
+  select(-Year) %>% 
+  na.omit() #removes entries with null values
 
-count1 = tidyr::spread(count,2,3)
-count1 = count1[c(-2,-3)]
+count1 = count %>% 
+  pivot_wider(names_from = Race,values_from = value) %>% 
+  select(-main_facet)
 
-education1 = tidyr::spread(employment,3,4)
-education1 = education1[-2]
+education1 = education %>% 
+  pivot_wider(names_from = Variable,values_from = Value) %>% 
+  select(-`Area Type`)
 
-employment1 = tidyr::spread(education,3,4)
-employment1 = employment1[-2]
+employment1 = employment %>% 
+  pivot_wider(names_from = Variable,values_from = Value) %>% 
+  select(-Year)
 
-## JOIN datasets together ##
-cc_table = inner_join(census1,count1,by='Area Name') # join edu and count
-ee_table = inner_join(education1,employment1,by='Area Name')
-full = inner_join(cc_table,ee_table,by='Area Name')
+#### join datasets together ####
+# cc_table = inner_join(census1,count1,by='Area Name') # join edu and count
+# ee_table = inner_join(education1,employment1,by='Area Name')
+# full = inner_join(cc_table,ee_table,by='Area Name')
+
+full = inner_join(census1,count1,by='Area Name') %>% 
+  inner_join(education1,by='Area Name') %>% 
+  inner_join(employment1,by='Area Name') %>% 
+  mutate(maj_white = as.logical(ifelse(`White alone`>= 67.0,1,0))) %>% 
+  # condense all the race variables into one column
+  nest(race = c(6:13)) %>% 
+  # drop race variables
+  select(-6:13,
+         -Year) %>% 
+  # seperate latitude/longitude
+  separate(geo_point_2d, sep = ",", into = c("lat","long")) %>% 
+  mutate(lat = as.numeric(lat),
+         long = as.numeric(long)) %>% 
+  # better variable names
+  rename(area = 1,
+    medi_owner = 2,
+    outsiders = 4,
+    pop = 3,
+    sat = 7,
+    avg_employ = 10,
+    avg_wage = 12,
+    employ_resid = 11,
+    fam_income = 13,
+    college = 8,
+    high_sch = 9)
+    
+
 
 ## New Variables ##
-# dummy variable for race in full 
-full$`Majority White`= ifelse(full$`White alone`>= 67.0,1,0)
-full$`Majority White` = as.logical()
-full1 = full # copy full to full1
-full = full[c(-5,-6,-7,-8,-9,-10,-11,-12,-13)] # drop race variables
-# seperate variables for latitude/longitude
-fullc = separate(full1, geo_point_2d, sep=",", into = c("lat","long"))
-fullc$lat = as.numeric(fullc$lat)
-fullc$long = as.numeric(fullc$long)
 
-names(full)
-names(full1)
-head(full,20)
+# getting rid of the word "County"
+# fullc2 = separate(fullc, fullc$`Area Name`, sep = " ", into = c("name","county"))
+fullc = separate(
+  full1, 
+  geo_point_2d, 
+  sep=",", 
+  into = c("lat","long")
+)
 
 ## fullset as a matrix ##
 # make a matrix (fullmatrix) from full [the hard way]
 # full_m = full1[c(-1,-5,-6,-7,-8,-9,-10,-11,-12,-21)]
 # fullm = as.matrix(sapply(full_m, as.numeric))
 # the easy way
-fullm = as.matrix(fullset[c(-1,-12,-13)])
-class(fullm)
+# fullm = as.matrix(fullset[c(-1,-12,-13)])
+# class(fullm)
 
-## transformed dataset ##
-fullset = read.table(
-  "fullset.csv",
-  header = T,
-  sep = ",",
-  dec = ".",
-  quote = "\"'"
-)
-var_names = names(fullset)
-var_names = var_names[-1]
-str(fullset)
-
-## rename variables ##
-fullset = fullset[,-1]
-fullset = fullset %>% 
-  rename(
-    area = 1,
-    medi_owner = 2,
-    outsiders = 3,
-    pop = 4,
-    avg_employ = 5,
-    avg_wage = 6,
-    employ_resid = 7,
-    fam_income = 8,
-    college = 9,
-    high_sch = 10,
-    sat = 11,
-    white_maj = 12,
-    part = 13
-  ) %>% 
-  select(area, everything()) 
-fullset$area = as.character(area)
-str(fullset)
-
-## export to .csv ##
-write.csv(fullset, "C:\\Users\\Christian Okoth\\Documents\\EC 351\\LINC\\fullset.csv")
-write.csv(fullm.r,"C:\\Users\\Christian Okoth\\Documents\\EC 351\\LINC\\fullset_corr.csv")
-write.csv(fullm.p,"C:\\Users\\Christian Okoth\\Documents\\EC 351\\LINC\\fs_pvalues.csv")
-write.csv(summ_stats,"C:\\Users\\Christian Okoth\\Documents\\EC 351\\LINC\\fullset_summary.csv")
+#### export to .csv ####
+write.csv(fullset, "\\LINC\\fullset.csv")
+write.csv(fullm.r,"\\LINC\\fullset_corr.csv")
+write.csv(fullm.p,"\\LINC\\fs_pvalues.csv")
+write.csv(summ_stats,"\\LINC\\fullset_summary.csv")
 
 # library(gridExtra)
 # pdf("fullset_corr.pdf", height=11, width=8.5)
@@ -126,30 +110,6 @@ write.csv(summ_stats,"C:\\Users\\Christian Okoth\\Documents\\EC 351\\LINC\\fulls
 # dev.off()
 # 
 # grid.arrange(tableGrob(fullm.r, gp=gpar(fontsize=6)), main="Correlation Matrix")
-
-# variable name fixes
-## this needs to be done but not tonight
-## done!
-fullset = full
-colnames(fullset)
-fullset1 = fullset
-
-# getting rid of the word "County"
-# fullc2 = separate(fullc, fullc$`Area Name`, sep = " ", into = c("name","county"))
-fullc = separate(
-  full1, 
-  geo_point_2d, 
-  sep=",", 
-  into = c("lat","long")
-  )
-# this method drops Hanover in New Hanover County [65,]
-fullset$county = full$`Area Name`
-fullset$county
-fullset1 = fullset %>%
-  separate(area, c("area","other"), extra = "merge", fill = "left")
-fullset1[65,]
-
-rlang::last_error()
 
 ## renaming df/mat ##
 summ_stats = full_desc;pvalues = fullm.p;rvalues = fullm.r;matrix = fullm
