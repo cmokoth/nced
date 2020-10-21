@@ -8,29 +8,58 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+```{r library}
+library(RColorBrewer); library(wesanderson); library(ggthemes)
+library(ggplot2)
+library(psych)
+
+```
 
 ## Project Assignment #2				Due: Tuesday, November 5 by 3:00PM 
 Value: 40% of your project grade (8% of your final grade)
 All work for this assignment must be done in gretl. This includes all graphs, summary statistics, correlations, and statistical tests. 
 1. Use graphical and numerical techniques to describe each variable, starting with your dependent variable.
 (a) Make a histogram for each of your continuous variables and comment on the characteristics of each distribution, e.g., symmetry, skewness, kurtosis, etc. You can get a better sense of this by checking the “Test against normality” button in Gretl when constructing your histogram. This will overlay the normal distribution against the histogram of your data.
+```{r}
+full %>% 
+  keep(is.numeric) %>% 
+  gather() %>% 
+  ggplot(aes(value)) +
+  geom_histogram(bins = 15) +
+    facet_wrap(~key, scales = "free")
+  
+```
+
 Make a bar chart for each of your dummy variables and comment on the proportion of your sample possessing that characteristic.
+```{r}
+full %>% 
+  ggplot(aes(maj_white)) +
+  geom_histogram(stat = "count")
+
+```
+
 (b) Use numerical techniques to describe each quantitative variable. For continuous variables, provide measures of central location (mean, median, mode), standard deviation, skewness and kurtosis. For each variable, specify which measure or measures are most descriptive.  For example, the mean conveys less information about a heavily skewed variable than the median. For some variables examination of the histogram may suggest that the mode is more representative, especially if you observe a bimodal distribution.
 ```{r echo=FALSE, results='markup'}
-kable(summ_stats,
-      alighn='l',
-      caption = "Summary Statistics"
-)
+full %>% 
+  keep(is.numeric) %>% 
+  describe() %>% 
+  select(-n,-vars,-trimmed,-mad)
+
 ```
+
 (c) Present a table of correlation coefficients for all of your variables. Which correlations are statistically significant? Based on this, which of your independent variables seem likely to be important determinants of your dependent variable?
 ```{r echo=FALSE, results='asis'}
-library(knitr)
-kable(fullm.r, digits= 4, padding=2, align='l',
-      caption = "Table of correlation coefficients.")
+full %>% 
+  keep(is.numeric) %>% 
+  corr.test()
+
 ```
 Based upon the significance of the p=values, it appears that all of the independent continuous variables are statistically significant
 
-2. Divide your sample into two sub-samples. Discuss why you have chosen to divide the sample in this way and what types of questions you will be able to answer by comparing the two sub-samples. Base the split on a logical division within your sample where there are intuitive diﬀerences between the two groups. 
+2. Divide your sample into two sub-samples. Discuss why you have chosen to divide the sample in this way and what types of questions you will be able to answer by comparing the two sub-samples. Base the split on a logical division within your sample where there are intuitive diﬀerences between the two groups.
+```{r}
+
+```
 A number of variable divisions could be considered for this dataset. I considered spliting the groups by level of education, ranking the ratio of high school to college grads. I also connsidered splitting the data by population. I also considered splitting it by SAT score. I settled on a longitudinal divide between the East and West parts of the state, which split my data neatly in half. When redoing my anaylsis, I will likely split the data into three sections and performing an ANOVA test for the three major parts of the state (Mountains, Piedmont, Coastal Plains).
 
 Test the hypothesis that your dependent variable is equal across the two samples. What are the implications of your ﬁndings? Plots to model assumptions: 

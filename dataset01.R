@@ -53,38 +53,29 @@ full = inner_join(census1,count1,by='Area Name') %>%
   mutate(maj_white = as.logical(ifelse(`White alone`>= 67.0,1,0))) %>% 
   # condense all the race variables into one column
   nest(race = c(6:13)) %>% 
-  # drop race variables
-  select(-6:13,
-         -Year) %>% 
-  # seperate latitude/longitude
-  separate(geo_point_2d, sep = ",", into = c("lat","long")) %>% 
+  # separate latitude/longitude
+  separate(geo_point_2d, sep = ",", into = c("lat","long"),remove = TRUE) %>% 
   mutate(lat = as.numeric(lat),
          long = as.numeric(long)) %>% 
+  nest(coordinates = c(lat,long)) %>% 
+  select(-Year) %>% 
   # better variable names
   rename(area = 1,
     medi_owner = 2,
     outsiders = 4,
-    pop = 3,
-    sat = 7,
-    avg_employ = 10,
-    avg_wage = 12,
-    employ_resid = 11,
-    fam_income = 13,
-    college = 8,
-    high_sch = 9)
+    population = 3,
+    sat = 5,
+    avg_employ = 8,
+    avg_wage = 10,
+    employ_resid = 9,
+    fam_income = 11,
+    college = 6,
+    high_sch = 7)
+  
     
 
 
 ## New Variables ##
-
-# getting rid of the word "County"
-# fullc2 = separate(fullc, fullc$`Area Name`, sep = " ", into = c("name","county"))
-fullc = separate(
-  full1, 
-  geo_point_2d, 
-  sep=",", 
-  into = c("lat","long")
-)
 
 ## fullset as a matrix ##
 # make a matrix (fullmatrix) from full [the hard way]

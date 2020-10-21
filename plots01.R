@@ -2,7 +2,7 @@
 #load 'full' dataset
 install.packages("wesanderson")
 # color palletes
-library(RColorBrewer); library(wesanderson)
+library(RColorBrewer); library(wesanderson); library(ggthemes)
 # pipes and stuff I need
 library(tidyverse); library(ggplot2)
 library(readr)
