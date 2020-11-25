@@ -1,6 +1,7 @@
 ### Data Cleaning ###
 
 ## Package Loading
+library(readr)
 library(knitr)
 library(tidyverse)
 library(formattable)
@@ -75,35 +76,4 @@ full = inner_join(census1,count1,by='Area Name') %>%
     
 
 
-## New Variables ##
 
-## fullset as a matrix ##
-# make a matrix (fullmatrix) from full [the hard way]
-# full_m = full1[c(-1,-5,-6,-7,-8,-9,-10,-11,-12,-21)]
-# fullm = as.matrix(sapply(full_m, as.numeric))
-# the easy way
-# fullm = as.matrix(fullset[c(-1,-12,-13)])
-# class(fullm)
-
-#### export to .csv ####
-write.csv(fullset, "\\LINC\\fullset.csv")
-write.csv(fullm.r,"\\LINC\\fullset_corr.csv")
-write.csv(fullm.p,"\\LINC\\fs_pvalues.csv")
-write.csv(summ_stats,"\\LINC\\fullset_summary.csv")
-
-# library(gridExtra)
-# pdf("fullset_corr.pdf", height=11, width=8.5)
-# grid.table(fullm.r)
-# dev.off()
-# 
-# png("test.png", height = 50*nrow(df), width = 200*ncol(df))
-# grid.table(fullm.r)
-# dev.off()
-# 
-# grid.arrange(tableGrob(fullm.r, gp=gpar(fontsize=6)), main="Correlation Matrix")
-
-## renaming df/mat ##
-summ_stats = full_desc;pvalues = fullm.p;rvalues = fullm.r;matrix = fullm
-
-## clearing environment ##
-rm(full1,full_m,fullm,full_desc,full_measures)

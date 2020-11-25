@@ -12,14 +12,18 @@ library(tidyverse)
 library(skimr)
 ```
 
-```{r child, child=,include=FALSE}
-
-```
-
 ##Project Assignment #1					Due: Tuesday, October 8 by 3:00PM
 Value: 20% of your project grade (4% of your final grade)
 1. Describe your topic. What relationship/phenomenon do you want to study? This should be a research question that has been refined and polished since your initial discussions with me on your topic.
-I want to study regional economic development in North Carolina. 
+
+I hypothesize that the more development that a region has, the more people will want to live there, and the more people that will need to support the industries that are in it. An area with more people, a better educated workforce, and more people and ideas being imported will have better economic prospects. Businesses are attracted to a large, well educated labor force, and well educated workers are attracted to places that have the services they need to support their quality of life.
+Citing Lucas 2015; Manuelli and Seshadri 2014; Gennaloli et al. 2013; Hendricks 2002, Fan et. al. find that human capital is a major factor in economic growth.
+I want to study the relationship between local geographic area and economic outcome. I have to focus on differences between each geographic area. For this regression, I will focus on population because human capital has an empirical relationship to economic development. In this study, economic development will be examined primarily through Median Per Capita Income, as well as homeownership and employment variables. 
+Other development indicators included are
+The composition of the workforce will have an affect on the median income of the 
+also have data on other development indicators that I think may have an interfering effect on the population. I tried to gather variables that address the composition of the population as well, including race, number of people who lived outside of the county 5 years ago, etc. to study the influences of other factors. Optimally, when controlling for these factors, the population effect will still be significant due to the sheer amount of labor and industry required to support higher paying jobs for the workforce to participate in. 
+(Total population)/income relationship
+North Carolina counties
 
 2. Why is this topic interesting and important? What policy makers or ﬁrms would be interested in the topic?
 
@@ -93,7 +97,323 @@ full = inner_join(census,count,by='Area Name') %>%
 
 6. What is your dependent variable? Which of your independent variables is the primary focus of the project? (If you do not have a primary independent variable, which independent variable do you suspect will play the largest role in explaining your dependent variable?) Why did you include the other independent variables (these ones that are not the primary focus)? What factors are these variables controlling for?
 
+The dependent variable I'm using in my sample is `fam_income`, the Estimated Median Family Income(HUD) by county. This variable is an aggregate measure of the financial prosperity of people living in each county. I considered using another income measure, like wage or employment, but median household income is a better way of understanding the overall finances of the individual person. 
+
+I focus heavily on population indicators, movement, and education. I think these three variables will play the largest role in determining the hotspots of NC economic success. ‘Population Estimate’ should paint a good picture of whether or not there is a city or a large economic pull factor in a county. This indicator coupled with ‘Persons Living Outside This County Five Years Ago’ will complete the picture of large economic hubs, identifying areas of c new job creation and higher wages. 
+As for the remaining variables I decided to include in the dataset, I chose them because they could all be indicators of economic development in an area, and I would like to control for their effect when I run my OLS regression.
+
 7. Are there variables that you would like to include but do not have data for? How might those omissions affect your results?
+In 1983, North Carolina put together a commission to study and improve regional development. The program focuses on industry clusters, and has been wildly successful in developing major metropolitan regions, such as the Research triangle Park and the greater Charlotte metro. The regions include:
+*AdvantageWest
+*Charlotte Region
+*Eastern Region
+*Northeast Region
+*Southeast Region
+*Piedmont Triad
+*Research Triangle
+Having this data would have made it easier to see the direct effect of stimulus in NC sounties and regions, as they each have targeted development plans.
+```{r region}
+INTERACTIVE MAP
+Alamance
+Piedmont Triad (Central) Prosperity Zone
+
+Alexander
+Northwestern Prosperity Zone
+
+Alleghany
+Northwestern Prosperity Zone
+
+Anson
+Southwestern Prosperity Zone
+
+Ashe
+Northwestern Prosperity Zone
+
+Avery
+Northwestern Prosperity Zone
+
+Beaufort
+Northeast Prosperity Zone
+
+Bertie
+Northeast Prosperity Zone
+
+Bladen
+Sandhills (South Central) Prosperity Zone
+
+Brunswick
+Southeast Prosperity Zone
+
+Buncombe
+Western Prosperity Zone
+
+Burke
+Northwestern Prosperity Zone
+
+Cabarrus
+Southwestern Prosperity Zone
+
+Caldwell
+Northwestern Prosperity Zone
+
+Camden
+Northeast Prosperity Zone
+
+Carteret
+Southeast Prosperity Zone
+
+Caswell
+Piedmont Triad (Central) Prosperity Zone
+
+Catawba
+Northwestern Prosperity Zone
+
+Chatham
+North Central Prosperity Zone
+
+Cherokee
+Western Prosperity Zone
+
+Chowan
+Northeast Prosperity Zone
+
+Clay
+Western Prosperity Zone
+
+Cleveland
+Southwestern Prosperity Zone
+
+Columbus
+Sandhills (South Central) Prosperity Zone
+
+Craven
+Southeast Prosperity Zone
+
+Cumberland
+Sandhills (South Central) Prosperity Zone
+
+Currituck
+Northeast Prosperity Zone
+
+Dare
+Northeast Prosperity Zone
+
+Davidson
+Piedmont Triad (Central) Prosperity Zone
+
+Davie
+Piedmont Triad (Central) Prosperity Zone
+
+Duplin
+Southeast Prosperity Zone
+
+Durham
+North Central Prosperity Zone
+
+Edgecombe
+North Central Prosperity Zone
+
+Forsyth
+Piedmont Triad (Central) Prosperity Zone
+
+Franklin
+North Central Prosperity Zone
+
+Gaston
+Southwestern Prosperity Zone
+
+Gates
+Northeast Prosperity Zone
+
+Graham
+Western Prosperity Zone
+
+Granville
+North Central Prosperity Zone
+
+Greene
+Southeast Prosperity Zone
+
+Guilford
+Piedmont Triad (Central) Prosperity Zone
+
+Halifax
+Northeast Prosperity Zone
+
+Harnett
+North Central Prosperity Zone
+
+Haywood
+Western Prosperity Zone
+
+Henderson
+Western Prosperity Zone
+
+Hertford
+Northeast Prosperity Zone
+
+Hoke
+Sandhills (South Central) Prosperity Zone
+
+Hyde
+Northeast Prosperity Zone
+
+Iredell
+Southwestern Prosperity Zone
+
+Jackson
+Western Prosperity Zone
+
+Johnston
+North Central Prosperity Zone
+
+Jones
+Southeast Prosperity Zone
+
+Lee
+North Central Prosperity Zone
+
+Lenoir
+Southeast Prosperity Zone
+
+Lincoln
+Southwestern Prosperity Zone
+
+Macon
+Western Prosperity Zone
+
+Madison
+Western Prosperity Zone
+
+Martin
+Northeast Prosperity Zone
+
+McDowell
+Northwestern Prosperity Zone
+
+Mecklenburg
+Southwestern Prosperity Zone
+
+Mitchell
+Northwestern Prosperity Zone
+
+Montgomery
+Sandhills (South Central) Prosperity Zone
+
+Moore
+Sandhills (South Central) Prosperity Zone
+
+Nash
+North Central Prosperity Zone
+
+New Hanover
+Southeast Prosperity Zone
+
+Northampton
+Northeast Prosperity Zone
+
+Onslow
+Southeast Prosperity Zone
+
+Orange
+North Central Prosperity Zone
+
+Pamlico
+Southeast Prosperity Zone
+
+Pasquotank
+Northeast Prosperity Zone
+
+Pender
+Southeast Prosperity Zone
+
+Perquimans
+Northeast Prosperity Zone
+
+Person
+North Central Prosperity Zone
+
+Pitt
+Northeast Prosperity Zone
+
+Polk
+Western Prosperity Zone
+
+Randolph
+Piedmont Triad (Central) Prosperity Zone
+
+Richmond
+Sandhills (South Central) Prosperity Zone
+
+Robeson
+Sandhills (South Central) Prosperity Zone
+
+Rockingham
+Piedmont Triad (Central) Prosperity Zone
+
+Rowan
+Southwestern Prosperity Zone
+
+Rutherford
+Western Prosperity Zone
+
+Sampson
+Sandhills (South Central) Prosperity Zone
+
+Scotland
+Sandhills (South Central) Prosperity Zone
+
+Stanly
+Southwestern Prosperity Zone
+
+Stokes
+Piedmont Triad (Central) Prosperity Zone
+
+Surry
+Piedmont Triad (Central) Prosperity Zone
+
+Swain
+Western Prosperity Zone
+
+Transylvania
+Western Prosperity Zone
+
+Tyrrell
+Northeast Prosperity Zone
+
+Union
+Southwestern Prosperity Zone
+
+Vance
+North Central Prosperity Zone
+
+Wake
+North Central Prosperity Zone
+
+Warren
+North Central Prosperity Zone
+
+Washington
+Northeast Prosperity Zone
+
+Watauga
+Northwestern Prosperity Zone
+
+Wayne
+Southeast Prosperity Zone
+
+Wilkes
+Northwestern Prosperity Zone
+
+Wilson
+North Central Prosperity Zone
+
+Yadkin
+Piedmont Triad (Central) Prosperity Zone
+
+Yancey
+Northwestern Prosperity Zon
+```
 
 8. Print the first page of your data in the Excel spreadsheet or gretl table. Do not print or submit more than one page because doing so is wasteful. This requirement assures me that you have already collected the data.
 ```{r head echo=FALSE}

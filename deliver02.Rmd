@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(RColorBrewer); library(wesanderson); library(ggthemes)
 library(ggplot2)
 library(psych)
-
+library(tidyverse)
 ```
 
 ## Project Assignment #2				Due: Tuesday, November 5 by 3:00PM 
@@ -27,6 +27,14 @@ full %>%
   ggplot(aes(value)) +
   geom_histogram(bins = 15) +
     facet_wrap(~key, scales = "free")
+
+full %>% 
+  select(-area,
+         -race,
+         -coordinates,
+         -maj_white) %>% 
+  ggplot(aes(...)) +
+  geom_histogram()
   
 ```
 
@@ -52,7 +60,6 @@ full %>%
 full %>% 
   keep(is.numeric) %>% 
   corr.test()
-
 ```
 Based upon the significance of the p=values, it appears that all of the independent continuous variables are statistically significant
 
@@ -60,7 +67,7 @@ Based upon the significance of the p=values, it appears that all of the independ
 ```{r}
 
 ```
-A number of variable divisions could be considered for this dataset. I considered spliting the groups by level of education, ranking the ratio of high school to college grads. I also connsidered splitting the data by population. I also considered splitting it by SAT score. I settled on a longitudinal divide between the East and West parts of the state, which split my data neatly in half. When redoing my anaylsis, I will likely split the data into three sections and performing an ANOVA test for the three major parts of the state (Mountains, Piedmont, Coastal Plains).
+A number of variable divisions could be considered for this dataset. I considered spliting the groups by level of education, ranking the ratio of high school to college grads. I also considered splitting the data by population. I also considered splitting it by SAT score. I settled on a longitudinal divide between the East and West parts of the state, which split my data neatly in half. When redoing my anaylsis, I will likely split the data into three sections and performing an ANOVA test for the three major parts of the state (Mountains, Piedmont, Coastal Plains).
 
 Test the hypothesis that your dependent variable is equal across the two samples. What are the implications of your ﬁndings? Plots to model assumptions: 
 ```{r echo=FALSE}
