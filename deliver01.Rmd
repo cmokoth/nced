@@ -18,18 +18,22 @@ Value: 20% of your project grade (4% of your final grade)
 
 I hypothesize that the more development that a region has, the more people will want to live there, and the more people that will need to support the industries that are in it. An area with more people, a better educated workforce, and more people and ideas being imported will have better economic prospects. Businesses are attracted to a large, well educated labor force, and well educated workers are attracted to places that have the services they need to support their quality of life.
 Citing Lucas 2015; Manuelli and Seshadri 2014; Gennaloli et al. 2013; Hendricks 2002, Fan et. al. find that human capital is a major factor in economic growth.
+
 I want to study the relationship between local geographic area and economic outcome. I have to focus on differences between each geographic area. For this regression, I will focus on population because human capital has an empirical relationship to economic development. In this study, economic development will be examined primarily through Median Per Capita Income, as well as homeownership and employment variables. 
-Other development indicators included are
-The composition of the workforce will have an affect on the median income of the 
+
 also have data on other development indicators that I think may have an interfering effect on the population. I tried to gather variables that address the composition of the population as well, including race, number of people who lived outside of the county 5 years ago, etc. to study the influences of other factors. Optimally, when controlling for these factors, the population effect will still be significant due to the sheer amount of labor and industry required to support higher paying jobs for the workforce to participate in. 
 (Total population)/income relationship
 North Carolina counties
 
 2. Why is this topic interesting and important? What policy makers or ﬁrms would be interested in the topic?
 
+Should there be a relationship, it could be an indicator about poverty and economic development. This could develop into a study about the development of cities and towns as it relates to economic development, a question that would have significant impacts on how we ensure that people have fair access to resources.
+
 3. What is the population you are studying? What sample are you using? How representative is your sample of the population? What problems might there be with your sample?
 
+I’ll be studying the entire population of North Carolina (or the populations of every Metropolitan area in the South). I am using a sample of every county in North Carolina. My sample should be relatively accurate to the population because it is population data (I think) collected by each county in North Carolina. All of my data is from 2015 except for data from the Count table, which is unidentified by a ‘Year’ variable. This may pose a problem as to the validity of my findings, due to the fact that it may not be accurate to the year 2015. My sample may have some issues with assignment error, as I did have to transform some of the columns and rows to have clean data. 
 4. What is the source of your data? Did you have transform the data to get them into their present form? If so, what did you do?
+My sample will be coming from the North Carolina Office of State Budget and Management (OSBM) in the Log Into North Carolina (LINC) dataset. I did have to join data from separate surveys to make sure that I could get the information I needed. It was an inner join on Area Name. This included data on housing, population, income, and education.
 ```{r}
 ## Data Load ##
 census = read_delim(
@@ -92,8 +96,20 @@ full = inner_join(census,count,by='Area Name') %>%
     college = 6,
     high_sch = 7)
 ```
+I am also exploring county level data from the BEA.
 
 5. Describe the characteristics of each variable: units of measurement, whether it is categorical or quantitative, discrete or continuous. If a variable is categorical, provide the coding scheme used to convert it to a dummy variable.
+```{r}
+colnames(full)
+```
+
+From the Census Population and Housing (LINC) data: Population Estimate (BEA per Capita Denominator) [persons, quant, cont]; Persons Living Outside This County Five Years Ago [persons (prop), quant, cont]; Median Value of Owner Occupied Units [$, quant, cont]
+From NC Complete Count Committee data: American Indian and Alaska Native alone [%, cat, cont]; Asian alone [%, cat, cont]; Black or African American alone [%, cat, cont]; Hispanic or Latino (of any race) [%, cat, cont]; Native Hawaiian and Pacific Islander alone [%, cat, cont]; Some Other Race alone [%, cat, cont]; Two or more races [%, cat, cont]; White alone [%, cat, cont]
+With a race variable, I coded it as being majority white or not. To determine this scheme, I used the average of the white population variable from NC State over the fall and spring semesters in 2015. F: 66.4%; P: 67.7%; Avg: 67.05%	if the white population is >= 67.05 then 1, if <= then 0.
+From Employment and Income data: Estimated Median Family Income(HUD) [\$, quant, cont]; Employment by Place of Residence [?, quant, cont]; Average Annual Wage per Worker [\$, quant, cont]; Average Annual Employment by Place of Work [?, quant, cont]
+From Education: SAT Grand Total Average Score [none, quant, cont]; College Graduates Age 25 Up [persons, quant, cont]; High School Graduates Age 25 Up [persons, quant, cont];
+SECOND DUMMY: EAST WEST DIVIDE
+When plotting a number of development variables, there were similar patterns throughout the data where certain counties were consistetly significantly outliers. This is an interesting point of examination, because 
 
 6. What is your dependent variable? Which of your independent variables is the primary focus of the project? (If you do not have a primary independent variable, which independent variable do you suspect will play the largest role in explaining your dependent variable?) Why did you include the other independent variables (these ones that are not the primary focus)? What factors are these variables controlling for?
 
@@ -111,7 +127,6 @@ In 1983, North Carolina put together a commission to study and improve regional 
 *Southeast Region
 *Piedmont Triad
 *Research Triangle
-Having this data would have made it easier to see the direct effect of stimulus in NC sounties and regions, as they each have targeted development plans.
 ```{r region}
 INTERACTIVE MAP
 Alamance
@@ -414,6 +429,8 @@ Piedmont Triad (Central) Prosperity Zone
 Yancey
 Northwestern Prosperity Zon
 ```
+Having this data would have made it easier to see the direct effect of stimulus in NC counties and regions, as they each have targeted development plans. This is a major ommitted variable that will certainly bias my results. It will be difficult to see the complete picture of growth.
+I also wanted to include the labor force participation rate, which may have elucidated whether or not each county has a sufficient number of people to support these industries, and labor force participation by demographic group to see if it is dominated by people with or without college degrees, women, immigrants to the county and minorities.
 
 8. Print the first page of your data in the Excel spreadsheet or gretl table. Do not print or submit more than one page because doing so is wasteful. This requirement assures me that you have already collected the data.
 ```{r head echo=FALSE}
